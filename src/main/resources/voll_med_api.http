@@ -1,0 +1,35 @@
+POST http://localhost:8080/medicos
+Content-Type: application/json
+
+{
+    "nome": "Rodrigo da Silva Sauro",
+    "email": "rodrigo.sauro@voll.med",
+    "crm": "987654",
+    "especialidade": "GINECOLOGIA",
+    "telefone": "2512349876",
+    "endereco": {
+        "logradouro": "Rua Ruada",
+        "bairro": "Bairro Bairrado",
+        "cep": "87654321",
+        "cidade": "Cidade Cidadada",
+        "uf": "SC",
+        "numero": "69",
+        "complemento": "Complemento Complementado"
+        }
+}
+
+###
+GET http://localhost:8080/medicos
+
+###
+PUT http://localhost:8080/medicos
+Content-Type: application/json
+
+{
+    "id": 1,
+    "nome": "Rodrigo Machado de Assis",
+    "telefone": "9685213258"
+}
+
+###
+DELETE http://localhost:8080/medicos/1
