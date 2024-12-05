@@ -1,4 +1,4 @@
-package com.rgbrain.api.endereco;
+package com.rgbrain.api.domain.endereco;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

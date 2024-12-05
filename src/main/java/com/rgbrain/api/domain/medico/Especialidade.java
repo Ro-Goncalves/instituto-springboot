@@ -1,4 +1,4 @@
-package com.rgbrain.api.medico;
+package com.rgbrain.api.domain.medico;
 
 public enum Especialidade {
     ORTOPEDIA,

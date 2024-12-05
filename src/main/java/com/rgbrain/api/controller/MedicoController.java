@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.rgbrain.api.endereco.Endereco;
-import com.rgbrain.api.medico.DadosAtualizacaoMedico;
-import com.rgbrain.api.medico.DadosCadastroMedico;
-import com.rgbrain.api.medico.DadosDetalhamentoMedico;
-import com.rgbrain.api.medico.DadosListagemMedico;
-import com.rgbrain.api.medico.Medico;
-import com.rgbrain.api.medico.MedicoRepository;
+import com.rgbrain.api.domain.endereco.Endereco;
+import com.rgbrain.api.domain.medico.DadosAtualizacaoMedico;
+import com.rgbrain.api.domain.medico.DadosCadastroMedico;
+import com.rgbrain.api.domain.medico.DadosDetalhamentoMedico;
+import com.rgbrain.api.domain.medico.DadosListagemMedico;
+import com.rgbrain.api.domain.medico.Medico;
+import com.rgbrain.api.domain.medico.MedicoRepository;
 
 import jakarta.validation.Valid;
 

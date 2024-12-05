@@ -1,6 +1,6 @@
-package com.rgbrain.api.medico;
+package com.rgbrain.api.domain.medico;
 
-import com.rgbrain.api.endereco.Endereco;
+import com.rgbrain.api.domain.endereco.Endereco;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

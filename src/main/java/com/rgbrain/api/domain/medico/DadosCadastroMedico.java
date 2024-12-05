@@ -1,6 +1,6 @@
-package com.rgbrain.api.medico;
+package com.rgbrain.api.domain.medico;
 
-import com.rgbrain.api.endereco.DadosEndereco;
+import com.rgbrain.api.domain.endereco.DadosEndereco;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

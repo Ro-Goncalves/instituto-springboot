@@ -68,4 +68,63 @@ Nova URI
         return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
     }
 
+## Lidando com erros
 
+Movendo classes para o "Dominio"
+
+pripriedade para não retornar stacktrace na API server.error.include-stacktrace=never
+
+Classe para tratar erros
+@RestControllerAdvice
+public class TratadorErros {
+    
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Void> tratarEntityNotFoundException() {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNoValidExcpetion.class)
+    public ResponseEntity<Void> tratarMethodArgumentNoValidExcpetion(MethodArgumentNoValidExcpetion exception) {
+        var erros = exception.getFieldErrors();
+        return ResponseEntity.badRequest().body(
+            erros.strem()
+                .map(DadosErroValidacao::new)
+                .toList()
+        );
+    }
+
+    private Record DadosErroValidacao(String campo, String mensagem) {
+        public DadosErroValidacao(FieldError error) {
+            this(
+                erro.getField(),
+                erro.getDefaultMessage()
+            )
+        }
+    }
+}
+
+Centralizando mensagens de erro com arquivo ValidationMessagens
+
+nome.obrigatorio=Nome é obrigatório
+email.obrigatorio=Email é obrigatório
+email.invalido=Formato do email é inválido
+telefone.obrigatorio=Telefone é obrigatório
+crm.obrigatorio=CRM é obrigatório
+crm.invalido=Formato do CRM é inválido
+especialidade.obrigatoria=Especialidade é obrigatória
+endereco.obrigatorio=Dados do endereço são obrigatórios
+id.obrigatorio=O ID deve ser informado
+
+a classe fica assim
+
+public record DadosAtualizacaoMedico(
+    
+    @NotNull(message = "{id.obrigatorio}")
+    Long id,
+
+    String nome,
+    String telefone,
+    DadosEndereco endereco
+) {}
+
+## Spring Security

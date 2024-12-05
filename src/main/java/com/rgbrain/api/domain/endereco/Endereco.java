@@ -1,4 +1,4 @@
-package com.rgbrain.api.endereco;
+package com.rgbrain.api.domain.endereco;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

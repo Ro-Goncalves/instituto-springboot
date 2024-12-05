@@ -1,12 +1,12 @@
-package com.rgbrain.api.medico;
+package com.rgbrain.api.domain.medico;
 
-import com.rgbrain.api.endereco.DadosEndereco;
+import com.rgbrain.api.domain.endereco.DadosEndereco;
 
 import jakarta.validation.constraints.NotNull;
 
 public record DadosAtualizacaoMedico(
     
-    @NotNull(message = "O id do medico é obrigatório")
+    @NotNull(message = "{id.obrigatorio}")
     Long id,
 
     String nome,
