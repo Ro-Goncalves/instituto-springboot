@@ -128,3 +128,110 @@ public record DadosAtualizacaoMedico(
 ) {}
 
 ## Spring Security
+
+Nova dependência
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+Existem diversos algoritmos de hashing que podem ser utilizados para fazer essa transformação nas senhas dos usuários, sendo que alguns são mais antigos e não mais considerados seguros hoje em dia, como o MD5 e o SHA1. Os principais algoritmos recomendados atualmente são:
+
+Bcrypt
+Scrypt
+Argon2
+PBKDF2
+
+nova migration e entidade jpa
+
+CREATE TABLE usuarios(
+    id            INTEGER       PRIMARY KEY AUTOINCREMENT,
+    login         VARCHAR(100)  NOT NULL UNIQUE,
+    senha         VARCHAR(255)  NOT NULL
+);
+
+Classe para serviço de autenticação
+
+@Service
+public class AutenticacaoService implements UserDetailsService {
+
+    @Autowired
+    private UsuarioRepository repository;
+
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return repository.findByLogin(login);
+    }
+}
+
+Classe de configuração
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfigurations {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        return http.csrf(csrf -> csrf.disable())
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+}
+
+Controller para login
+@RestController
+@RequestMapping("/login")
+public class AutenticacaoController {
+    
+    @Autowired
+    private AuthenticationManager manager;
+
+    @PostMapping("")
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+        var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var authenticate = manager.authenticate(token);
+
+        return ResponseEntity.ok().build();
+    }
+}
+
+adicionar usuário para fazer login
+
+Entidade usuário
+@Table(name = "usuarios")
+@Entity(name = "Usuario")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Usuario implements UserDetails {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String login;
+    private String senha;
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+    @Override
+    public String getUsername() {
+        return login;
+    }
+}
