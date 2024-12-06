@@ -1,7 +1,10 @@
 package com.rgbrain.api.infra.exception;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,22 +18,26 @@ public class TratadorErros {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(MethodArgumentNoValidExcpetion.class)
-    public ResponseEntity<Void> tratarMethodArgumentNoValidExcpetion(MethodArgumentNoValidExcpetion exception) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<DadosErroValidacao>> tratarMethodArgumentNoValidExcpetion(MethodArgumentNotValidException exception) {
         var erros = exception.getFieldErrors();
+        
         return ResponseEntity.badRequest().body(
-            erros.strem()
+            erros.stream()
                 .map(DadosErroValidacao::new)
                 .toList()
         );
     }
 
-    private Record DadosErroValidacao(String campo, String mensagem) {
+    private record DadosErroValidacao(
+        String campo, 
+        String mensagem
+    ) {
         public DadosErroValidacao(FieldError error) {
             this(
-                erro.getField(),
-                erro.getDefaultMessage()
-            )
+                error.getField(),
+                error.getDefaultMessage()
+            );
         }
     }
 }
