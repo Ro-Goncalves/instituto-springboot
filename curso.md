@@ -235,3 +235,67 @@ public class Usuario implements UserDetails {
         return login;
     }
 }
+
+## JSON Web Token
+
+<!-- JWT -->
+<dependency>
+    <groupId>com.auth0</groupId>
+    <artifactId>java-jwt</artifactId>
+    <version>4.4.0</version>
+</dependency>
+<!-- JWT -->
+
+Classe que gera o token
+
+@Service
+public class TokenService {
+
+    @Value("{api.security.token.secret}")
+    private String secret;
+
+    public String gerarToken(Usuario usuario) {
+        try {
+            var algoritmo = Algorithm.HMAC256(secret);
+            return JWT.create()
+                .withIssuer("API Voll.med")
+                .withSubject(usuario.getLogin())
+                .withClaim("nomeUsuario", usuario.getUsername())
+                .withExpiresAt(dataExpiracao())
+                .sign(algoritmo);
+        } catch (JWTCreationException e) {
+            throw new RuntimeException("Erro ao gerar token jwt", e);
+        }
+    }
+
+    private Instant dataExpiracao() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+}
+
+AJustando classe que autentica
+@RestController
+@RequestMapping("/login")
+public class AutenticacaoController {
+    
+    @Autowired
+    private AuthenticationManager manager;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @PostMapping("")
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+        var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var authenticate = manager.authenticate(token);
+
+        return ResponseEntity.ok(tokenService.gerarToken((Usuario)authenticate.getPrincipal()));
+    }
+}
+
+
+Configura o properties
+
+api.security.token.secret=${JWT_SECRET: 123456789}
+
+COloca dentro de .env (JWT_SECRET="MinhaSenhaLinda")

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rgbrain.api.domain.usuario.DadosAutenticacao;
+import com.rgbrain.api.domain.usuario.Usuario;
+import com.rgbrain.api.infra.security.DadosTokenJWT;
+import com.rgbrain.api.infra.security.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -20,11 +23,16 @@ public class AutenticacaoController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("")
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-        var authenticate = manager.authenticate(token);
+        var authenticateToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var authenticate = manager.authenticate(authenticateToken);
 
-        return ResponseEntity.ok().build();
+        var tokenJWT = tokenService.gerarToken((Usuario)authenticate.getPrincipal());
+
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
