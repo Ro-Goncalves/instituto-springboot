@@ -1,0 +1,48 @@
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "login": "rodrigo.jesus@voll.med",
+    "senha": "rodrigo@852"
+}
+
+###
+POST http://localhost:8080/medicos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgVm9sbC5tZWQiLCJzdWIiOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwibm9tZVVzdWFyaW8iOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwiZXhwIjoxNzMzODc4MzM3fQ.rz0HgbBGD5KYMR8nFyNPgyUWvjOh8v60AYZLkR9dg9g
+Content-Type: application/json
+
+{
+    "nome": "Rodrigo de Jesus",
+    "email": "rodrigo.jesus@voll.med",
+    "crm": "852258",
+    "especialidade": "CARDIOLOGIA",
+    "telefone": "4752316548",
+    "endereco": {
+        "logradouro": "Rua Assis Marinho",
+        "bairro": "Bairro Marinho Assis",
+        "cep": "23168549",
+        "cidade": "Cidade Marinho",
+        "uf": "MG",
+        "numero": "85",
+        "complemento": "Complemento Assis"
+        }
+}
+
+###
+GET http://localhost:8080/medicos?pagina=0&tamanho=1&ordem=email
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgVm9sbC5tZWQiLCJzdWIiOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwibm9tZVVzdWFyaW8iOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwiZXhwIjoxNzMzODc4MzM3fQ.rz0HgbBGD5KYMR8nFyNPgyUWvjOh8v60AYZLkR9dg9g
+
+###
+PUT http://localhost:8080/medicos
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgVm9sbC5tZWQiLCJzdWIiOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwibm9tZVVzdWFyaW8iOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwiZXhwIjoxNzMzODc4MzM3fQ.rz0HgbBGD5KYMR8nFyNPgyUWvjOh8v60AYZLkR9dg9g
+Content-Type: application/json
+
+{
+    "id": 6,
+    "nome": "Rodrigo Juniores",
+    "telefone": "4325874123"
+}
+
+###
+DELETE http://localhost:8080/medicos/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBUEkgVm9sbC5tZWQiLCJzdWIiOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwibm9tZVVzdWFyaW8iOiJyb2RyaWdvLmplc3VzQHZvbGwubWVkIiwiZXhwIjoxNzMzODc4MzM3fQ.rz0HgbBGD5KYMR8nFyNPgyUWvjOh8v60AYZLkR9dg9g

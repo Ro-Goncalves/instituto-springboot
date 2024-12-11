@@ -299,3 +299,39 @@ Configura o properties
 api.security.token.secret=${JWT_SECRET: 123456789}
 
 COloca dentro de .env (JWT_SECRET="MinhaSenhaLinda")
+
+## Controler de acesso
+
+classe que configurará o filtro
+
+@Component
+public class SecurityFilter extends OncePerRequestFilter{
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        
+            filterChain.doFilter(request, response);
+    }
+}
+
+Implementar
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    return http.csrf().disable()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and().authorizeHttpRequests()
+        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+        .requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.DELETE, "/pacientes").hasRole("ADMIN")
+        .anyRequest().authenticated()
+        .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+        .build();
+}
+
+Nessa aula, você aprendeu como:
+Funcionam os Filters em uma requisição;
+Implementar um filter criando uma classe que herda da classe OncePerRequestFilter, do Spring;
+Utilizar a biblioteca Auth0 java-jwt para realizar a validação dos tokens recebidos na API;
+Realizar o processo de autenticação da requisição, utilizando a classe SecurityContextHolder, do Spring;
+Liberar e restringir requisições, de acordo com a URL e o verbo do protocolo HTTP.

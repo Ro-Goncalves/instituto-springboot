@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,9 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping("")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+        var teste =  new BCryptPasswordEncoder();
+        System.out.println(teste.encode(dados.senha()));
         var authenticateToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         var authenticate = manager.authenticate(authenticateToken);
 

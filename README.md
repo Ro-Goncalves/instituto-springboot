@@ -1,8 +1,8 @@
 # Spring Boot - API VOLL MED  <!-- omit in toc -->
 
-Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à formação Java e Spring Boot da Alura. A API foi criada com base no curso *Spring Boot 3: desenvolva uma API Rest em Java*.
+Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à formação Java e Spring Boot da Alura. A API foi criada com base na formação *Java e Spring Boot: Aprenda a criar aplicações com o framework mais amado do mundo Java*.
 
-[Curso Alura](https://cursos.alura.com.br/course/spring-boot-3-desenvolva-api-rest-java)
+[Formação Alura](https://cursos.alura.com.br/formacao-spring-boot-3)
 
 - [Objetivo](#objetivo)
   - [Dependências principais do projeto](#dependências-principais-do-projeto)
@@ -66,15 +66,23 @@ O projeto tem como objetivo apresentar uma introdução ao Spring Boot, criando 
 - **Spring Boot DevTools**  
   Melhora a produtividade com reinicialização automática do servidor durante o desenvolvimento.
 
+- **Java JWT**  
+  Biblioteca da Auth0 para criar e validar JSON Web Tokens (JWT), comumente usados para autenticação e autorização.
+
+- **Spring Boot Starter Security**  
+  Fornece suporte integrado para segurança em aplicações Spring, incluindo autenticação, autorização e proteção contra ataques comuns, como CSRF e XSS.
+
 ## Tecnologias e Ferramentas Utilizadas
 
-- **Java 21**
-- **Spring Boot 3**
-- **SQLite**
-- **Lombok**
-- **Flyway**
-- **Hibernate**
-- **Spring Data JPA**
+- **Java 21**  
+- **Spring Boot 3**  
+- **SQLite**  
+- **Lombok**  
+- **Flyway**  
+- **Hibernate**  
+- **Spring Data JPA**  
+- **Spring Security**  
+- **Java JWT**  
 
 ## Sobre o Spring Boot
 
