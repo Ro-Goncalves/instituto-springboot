@@ -15,10 +15,14 @@ Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à form
   - [Dados de Entrada `DadosCadastroMedico`](#dados-de-entrada-dadoscadastromedico)
   - [Entidade JPA `Medico`](#entidade-jpa-medico)
     - [Atributos da Classe](#atributos-da-classe)
+  - [Configurações `TratadorErros`](#configurações-tratadorerros)
+  - [Configurações `SecurityConfigurations`](#configurações-securityconfigurations)
+  - [Filtros `SecurityFilter`](#filtros-securityfilter)
 - [Migração do Banco de Dados](#migração-do-banco-de-dados)
   - [Estrutura de Migrations](#estrutura-de-migrations)
   - [Como Funcionam as Migrations](#como-funcionam-as-migrations)
   - [Benefícios](#benefícios)
+- [Autenticação com JWT](#autenticação-com-jwt)
 - [Executando o Projeto](#executando-o-projeto)
   - [Extensões Instaladas](#extensões-instaladas)
   - [Como Rodar o Projeto](#como-rodar-o-projeto)
@@ -122,13 +126,16 @@ Aqui, utilizamos três elementos importantes:
 
 Com essa estrutura, podemos focar no desenvolvimento das funcionalidades, enquanto o framework cuida da configuração e injeção necessárias.
 
-No método abaixo, utilizamos as anotações `@PostMapping` e `@Transactional`. A anotação `@PostMapping` define que essa rota irá lidar com requisições do tipo **POST**, enquanto `@Transactional` garante que a operação seja executada dentro de uma transação, preservando a integridade dos dados em caso de falhas.
+No método abaixo, utilizamos as anotações `@PostMapping` e `@Transactional`. A anotação `@PostMapping` define que essa rota irá lidar com requisições do tipo **POST**, enquanto `@Transactional` garante que a operação seja executada dentro de uma transação, preservando a integridade dos dados em caso de falhas. Também tratamos o retorno: retornamos status code 201, os dados do médico cadastrato e a URI do recurso criado.
 
 ```java
 @PostMapping("")
 @Transactional
-public void cadastrar(@RequestBody @Valid DadosCadastroMedico dados) {
+public ResponseEntity<DadosDetalhamentoMedico> cadastrar(@RequestBody @Valid DadosCadastroMedico dados) {
     ...implementação...
+
+    var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+    return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
 }
 ```
 
@@ -137,14 +144,13 @@ Nos parâmetros do método, destacam-se outras duas anotações:
 - **`@RequestBody`**: Indica que o corpo da requisição será mapeado para o objeto `DadosCadastroMedico`.  
 - **`@Valid`**: Assegura que os dados fornecidos sejam validados conforme as restrições definidas no modelo.
 
-Agora utilizamos duas anotações a `@PostMapping` e `@Transactional` para indicar que essa rota irá receber uma requisição POST e que ela deve ser executada dentro de uma transação para garantir integridade dos dados. Note que no paramtros do método existem outras duas anotatações `@RequestBody` e `@Valid` que indicam que a requisição deve ser lida como um corpo de requisição e que os dados devem ser validados com a anotação `@Valid`.
-
 A próxima rota implementa a funcionalidade de listagem de usuários. Por padrão, ela retorna 10 resultados paginados e ordenados pelo campo `nome`.
 
 ```java
 @GetMapping("")
-public Page<DadosListagemMedico> buscarTodos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+public ResponseEntity<Page<DadosListagemMedico>>  buscarTodos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
     ...implementação...
+    return ResponseEntity.ok(page);
 }
 ```
 
@@ -158,24 +164,38 @@ Com a tecnologia se mostrando tão poderosa, mesmo em algo aparentemente simples
 ```java
 @PutMapping("")
 @Transactional
-public void atualizar(@RequestBody @Valid DadosAtualizacaoMedico dados) {
+public ResponseEntity<DadosDetalhamentoMedico> atualizar(@RequestBody @Valid DadosAtualizacaoMedico dados) {
     ...implementação...
+
+    return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
 }
 ```
 
 Aqui, introduzimos a anotação **`@PutMapping`**, que especifica que a rota responderá a requisições do tipo **PUT**. Mais uma vez, a anotação `@Transactional` é utilizada para garantir a consistência dos dados.
 
-Finalmente, implementamos a rota para exclusão de um médico:
+Implementamos a rota para exclusão de um médico:
 
 ```java
 @DeleteMapping("/{id}")
 @Transactional
 public void excluir(@PathVariable Long id) {
     ...implementação...
+    return ResponseEntity.noContent().build();
 }
 ```
 
-A anotação **`@DeleteMapping`** é apresentada, indicando que a rota aceitará requisições do tipo **DELETE**. O uso de `@Transactional` permanece essencial para evitar inconsistências durante a operação. Além disso, vemos a anotação **`@PathVariable`**, que vincula o valor do parâmetro `id` ao trecho correspondente no endpoint (`/{id}`).
+A anotação **`@DeleteMapping`** é apresentada, indicando que a rota aceitará requisições do tipo **DELETE**. O uso de `@Transactional` permanece essencial para evitar inconsistências durante a operação. Além disso, vemos a anotação **`@PathVariable`**, que vincula o valor do parâmetro `id` ao trecho correspondente no endpoint (`/{id}`). Essa rota retorna 204 quando um médico é excluído com sucesso.
+
+Para terminar, criamos a rota para detalhar os médicos, não existe nada de novo nela.
+
+```java
+@GetMapping("/{id}")
+public ResponseEntity<DadosDetalhamentoMedico> detalhar(@PathVariable Long id) {
+    ...implementação...
+
+    return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+}
+```
 
 Cada uma dessas anotações torna o código mais expressivo e facilita a construção de APIs RESTful, demonstrando a elegância e simplicidade do Spring Framework.
 
@@ -199,24 +219,24 @@ Aqui temos uma classe `record` que define os dados necessários para o cadastro 
 
 ```java
 public record DadosCadastroMedico(
-    @NotBlank(message = "O nome do médico é obrigatório")
+    @NotBlank(message = "{nome.obrigatorio}")
     String nome,
 
-    @NotBlank(message = "O email do médico é obrigatório")
-    @Email(message = "O email do médico é inválido")
+    @NotBlank(message = "{email.obrigatorio}")
+    @Email(message = "{email.invalido}")
     String email,
 
-    @NotBlank(message = "O telefone do médico é obrigatório")
+    @NotBlank(message = "{telefone.obrigatorio}")
     String telefone,
 
-    @NotBlank(message = "O crm do médico é obrigatório")
-    @Pattern(regexp = "\\d{4,6}", message = "O crm do médico deve conter 6 dígitos")
+    @NotBlank(message = "{crm.obrigatorio}")
+    @Pattern(regexp = "\\d{4,6}", message = "{crm.invalido}")
     String crm,
 
-    @NotNull
+    @NotNull(message = "{especialidade.obrigatorio}")
     Especialidade especialidade,
 
-    @NotNull
+    @NotNull(message = "{endereco.obrigatorio}")
     @Valid
     DadosEndereco endereco
     
@@ -229,7 +249,7 @@ public record DadosCadastroMedico(
 - **`@NotNull`**: Indica que os campos `especialidade` e `endereco` não podem ser nulos, garantindo que essas informações sejam obrigatoriamente fornecidas.  
 - **`@Valid`**: Aplica-se ao campo `endereco` (que é outro objeto). Essa anotação indica que os atributos internos de `DadosEndereco` também devem ser validados de acordo com as regras definidas em sua própria classe.
 
-Essas anotações facilitam a validação automática dos dados no momento em que são recebidos pela aplicação, centralizando a lógica de validação e reduzindo erros no processamento.
+Veja que, em cada validação, utilizamos o formato `message = "{crm.obrigatorio}"`. Isso é possível porque criamos o arquivo de propriedades **ValidationMessages** e definimos essas mensagens personalizadas nele.
 
 ### Entidade JPA `Medico`
 
@@ -282,6 +302,189 @@ private Endereco endereco;
 
 - **`@Embedded`**: Indica que o atributo `endereco` é uma entidade embutida, ou seja, seus campos serão mapeados diretamente como colunas na tabela `medicos`. Isso é útil para reutilizar classes menores como componentes.
 
+### Configurações `TratadorErros`
+
+O Spring Framework oferece ferramentas poderosas para lidar com exceções de forma centralizada e consistente, facilitando o desenvolvimento de APIs robustas e bem estruturadas. Neste exemplo, implementamos um tratamento de erros personalizado utilizando as anotações `@RestControllerAdvice` e `@ExceptionHandler`.
+
+- `@RestControllerAdvice`: Centraliza a lógica de tratamento de erros, fazendo com que a classe anotada com ela intercepte as exceções lançadas pela controller REST.
+- `@ExceptionHandler`: Especifica o método que irá lidar com exceções específicas.
+
+```java
+@RestControllerAdvice
+public class TratadorErros {
+    
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<Void> tratarEntityNotFoundException() {
+      return ResponseEntity.notFound().build();
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<List<DadosErroValidacao>> tratarMethodArgumentNoValidExcpetion(MethodArgumentNotValidException exception) {
+      var erros = exception.getFieldErrors();
+      
+      return ResponseEntity.badRequest().body(
+          erros.stream()
+              .map(DadosErroValidacao::new)
+              .toList()
+      );
+  }
+
+  private record DadosErroValidacao(
+      String campo, 
+      String mensagem
+  ) {
+      public DadosErroValidacao(FieldError error) {
+          this(
+              error.getField(),
+              error.getDefaultMessage()
+          );
+      }
+  }
+}
+```
+
+### Configurações `SecurityConfigurations`
+
+Para adicionar segurança à API com o Spring, precisamos configurar as classes de segurança apropriadas. A principal anotação utilizada para habilitar a segurança é `@EnableWebSecurity`. Esta anotação ativa o suporte a segurança baseada em web, permitindo a personalização da configuração de segurança.
+
+**`SecurityFilterChain securityFilterChain(HttpSecurity http)`**  
+Este método define a configuração básica do fluxo de segurança da aplicação. O HttpSecurity permite configurar diversas opções de segurança, como políticas de autenticação, autorização, segurança de formulários e proteção contra CSRF (Cross-Site Request Forgery).
+
+**`AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)`**  
+Este método cria o `AuthenticationManager`, que é responsável por gerenciar o processo de autenticação de usuários. Ele utiliza o `AuthenticationConfiguration` para configurar o gerenciador.
+
+O `AuthenticationManager` pode ser personalizado para incluir mecanismos de autenticação como autenticação por usuário e senha ou autenticação baseada em token.
+
+**`PasswordEncoder passwordEncoder()`**  
+O `PasswordEncoder` é responsável por criptografar ou decifrar senhas antes de serem armazenadas ou verificadas. Ele protege informações sensíveis e assegura a integridade da segurança de login.
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfigurations {
+
+  @Autowired
+  private SecurityFilter securityFilter;
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+      return http.csrf(csrf -> csrf.disable())
+          .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+          .authorizeHttpRequests(auth -> {
+              auth.requestMatchers("/login").permitAll();
+              auth.anyRequest().authenticated();
+          })
+          .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+          .build();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+      return configuration.getAuthenticationManager();
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder(){
+      return new BCryptPasswordEncoder();
+  }
+}
+```
+
+Além da configuração de segurança utilizando `@EnableWebSecurity`, nossa entidade JPA que representa o usuário precisa implementar a interface `UserDetails`. Este é um passo essencial para garantir que o Spring Security saiba como autenticar e autorizar os usuários adequadamente. O método mais relevante nesta implementação é o `public Collection<? extends GrantedAuthority> getAuthorities()`, que define o nível de acesso que o usuário terá.
+
+```java
+public class Usuario implements UserDetails {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String login;
+    private String senha;
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+    @Override
+    public String getUsername() {
+        return login;
+    }
+}
+```
+
+### Filtros `SecurityFilter`
+
+No Spring Boot, um filtro é um componente que intercepta requisições HTTP antes que elas alcancem o controlador (controller). Ele pode ser usado para tarefas como autenticação, autorização, logging, ou outras validações específicas. A interface `OncePerRequestFilter` é particularmente útil, pois garante que o filtro seja executado apenas uma vez por requisição, independentemente de quantas vezes a requisição passe por diferentes componentes.
+
+A classe SecurityFilter implementa o método `doFilterInternal`, que é chamado para processar cada requisição.
+
+**`FilterChain`**  
+A `FilterChain` é responsável por passar a requisição para o próximo filtro na cadeia de filtros.
+
+Em nosso caso, `filterChain.doFilter(request, response)` garante que, após o processamento do filtro de autenticação, a requisição prossiga para outros filtros ou chegue ao controlador.
+
+**`UsernamePasswordAuthenticationToken`**  
+É uma implementação de `Authentication` usada para representar as credenciais de autenticação (usuário e senha).
+
+- O usuário autenticado é definido no token.
+- As credenciais são null porque não é necessário fornecer a senha após a autenticação.
+- As permissões (roles) do usuário são adicionadas através do método usuario.getAuthorities().
+
+**`SecurityContextHolder`**
+É o componente central do Spring Security responsável por armazenar informações de segurança do contexto atual.
+
+Quando `SecurityContextHolder.getContext().setAuthentication(authentication)` é chamado, ele registra o usuário autenticado, tornando-o acessível durante toda a requisição.
+
+```java
+@Component
+public class SecurityFilter extends OncePerRequestFilter{
+
+  @Autowired
+  private TokenService tokenService;
+
+  @Autowired
+  private UsuarioRepository usuarioRepository;
+
+  @Override
+  protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
+          throws ServletException, IOException {
+      
+    var tokenJwt = obterToken(request);
+
+    if (tokenJwt != null) {
+      var subject = tokenService.obterSubject(tokenJwt);
+      var usuario = usuarioRepository.findByLogin(subject);
+
+      var authentication = new UsernamePasswordAuthenticationToken(
+        usuario, 
+        null, 
+        usuario.getAuthorities()
+      );
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+    
+    filterChain.doFilter(request, response);
+  }
+
+  private String obterToken(HttpServletRequest request) {
+    var authorizationHeader = request.getHeader("Authorization");
+    if (authorizationHeader != null) {
+      return authorizationHeader.replace("Bearer ", "");
+    }
+    return null;
+  }
+}
+```
+
+**Benefícios de Usar Filtros**  
+
+- **Centralização:** Permite realizar a autenticação e autorização antes que a lógica do controlador seja executada.
+- **Segurança:** Impede que requisições não autenticadas ou mal-intencionadas alcancem os endpoints protegidos.
+- **Flexibilidade:** Filtros podem ser configurados para aplicar validações específicas de acordo com a necessidade.
+
 ## Migração do Banco de Dados
 
 As *migrations* são um conceito fascinante que permite gerenciar e versionar alterações no banco de dados de forma automatizada e confiável. Utilizando o **Flyway**, podemos criar arquivos que descrevem alterações incrementais no esquema do banco, garantindo que a estrutura do banco esteja sempre alinhada com o código da aplicação.
@@ -331,6 +534,19 @@ No diretório `resources/db/migrations`, criamos arquivos nomeados seguindo um p
 
    A coluna é adicionada com um valor padrão de `0` (inativo), e o script também inicializa todos os registros existentes como ativos (`ativo = 1`).
 
+4. **`V4__create-table-usuarios.sql`**:
+  Cria a tabela de usuários.
+
+  ```sql
+  CREATE TABLE usuarios(
+      id    INTEGER      PRIMARY KEY AUTOINCREMENT,
+      login VARCHAR(100) NOT NULL UNIQUE,
+      senha VARCHAR(255) NOT NULL
+  );
+
+  INSERT INTO usuarios(login, senha) VALUES('rodrigo.jesus@voll.med', '$2a$10$/mbdRFp53evVENH32rxXEewML5J1aUTVvrBuaJ6/oFRfX/3bLHZWW')
+  ```
+
 ### Como Funcionam as Migrations
 
 As *migrations* são executadas automaticamente sempre que a aplicação é iniciada. O Flyway verifica o histórico de migrações aplicadas, armazenado em uma tabela especial (`flyway_schema_history`), e executa apenas os arquivos novos, garantindo que o banco de dados evolua sem reprocessar alterações já aplicadas.
@@ -340,6 +556,54 @@ As *migrations* são executadas automaticamente sempre que a aplicação é inic
 - **Controle de versão**: Cada alteração no banco é rastreável, permitindo revisões e reversões se necessário.  
 - **Automatização**: A aplicação sempre inicializa com a estrutura de banco correta, evitando erros manuais.  
 - **Colaboração**: Em equipes, todos os desenvolvedores compartilham a mesma estrutura de banco ao sincronizar o código.
+
+## Autenticação com JWT
+
+A geração de tokens JWT (JSON Web Token) é uma prática comum para autenticação e autorização em APIs modernas. Aqui, iremos detalhar como a classe `TokenService` cria tokens usando o algoritmo **HMAC256** com o uso seguro da chave secreta, bem como a integração com os atributos necessários para gerar um token robusto e seguro.
+
+A autenticação usando JWT envolve a criação de um token com informações como o **issuer**, **subject**, **claims** e o **expiresAt**. O algoritmo utilizado para assinatura do token é **HMAC256**, que oferece segurança adequada ao envolver uma chave secreta para garantir a integridade das informações.
+
+**@Value("${api.security.token.secret}"):**  
+A anotação @Value é utilizada para recuperar a chave secreta armazenada no arquivo de configurações. A chave secreta é essencial para a assinatura do token e precisa ser protegida para evitar vazamentos de informações sensíveis.
+
+**Algoritmo HMAC256:**  
+O HMAC (Hash-based Message Authentication Code) é um algoritmo usado para garantir a integridade e autenticidade das informações no token. O HMAC256 é uma versão robusta que utiliza um hash SHA-256 para garantir a segurança do token.
+
+**JWT.create():**  
+A partir do JWT Builder, são definidos diversos atributos essenciais. O **issuer** é o emissor do token, enquanto o **subject** é o usuário associado ao token. No exemplo, há também o uso do **withClaim** para incluir informações adicionais relacionadas ao usuário.
+
+**dataExpiracao():**  
+A função `dataExpiracao` define o tempo de expiração do token, que é configurado para 2 horas após a criação.
+
+**Tratamento de Erros:**  
+Um `JWTCreationException` é lançado caso ocorra algum erro na geração do token, garantindo que o serviço tratado evita exceções não controladas.
+
+```java
+@Service
+public class TokenService {
+
+  @Value("{api.security.token.secret}")
+  private String secret;
+
+  public String gerarToken(Usuario usuario) {
+    try {
+      var algoritmo = Algorithm.HMAC256(secret);
+      return JWT.create()
+        .withIssuer("API Voll.med")
+        .withSubject(usuario.getLogin())
+        .withClaim("nomeUsuario", usuario.getUsername())
+        .withExpiresAt(dataExpiracao())
+        .sign(algoritmo);
+    } catch (JWTCreationException e) {
+      throw new RuntimeException("Erro ao gerar token jwt", e);
+    }
+  }
+
+  private Instant dataExpiracao() {
+    return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+  }
+}
+```
 
 ## Executando o Projeto
 
