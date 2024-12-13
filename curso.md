@@ -87,3 +87,17 @@ Implementar uma consulta JPQL (Java Persistence Query Language) complexa em uma 
 
 ## Regras de Negócio
 
+Criado os validadores
+
+Em agendar
+
+validadores.forEach(E -> E.validar(dados));
+
+e  @Autowired
+    private List<ValidadorAgendamentoConsultas> validadores;
+
+Infeta todas as classes com validadores, principios SOLID. SOL
+
+Isolar os códigos de validações de regras de negócio em classes separadas, utilizando nelas a anotação @Component do Spring;
+Finalizar a implementação do algoritmo de agendamento de consultas;
+Utilizar os princípios SOLID para deixar o código da funcionalidade de agendamento de consultas mais fácil de entender, evoluir e testar.

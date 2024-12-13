@@ -28,9 +28,7 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping("")
-    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        var teste =  new BCryptPasswordEncoder();
-        System.out.println(teste.encode(dados.senha()));
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {       
         var authenticateToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         var authenticate = manager.authenticate(authenticateToken);
 

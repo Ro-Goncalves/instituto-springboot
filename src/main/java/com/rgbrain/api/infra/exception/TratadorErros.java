@@ -8,10 +8,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.rgbrain.api.domain.consulta.ValidacaoException;
+
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class TratadorErros {
+
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity<String> trataValidacaoException(ValidacaoException exception){
+        return ResponseEntity.badRequest().body(exception.getMessage());
+    }
     
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Void> tratarEntityNotFoundException() {

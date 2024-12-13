@@ -1,16 +1,21 @@
 package com.rgbrain.api.domain.consulta.validacoes;
 
-import java.time.LocalDateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.rgbrain.api.domain.consulta.ConsultaRepository;
+import com.rgbrain.api.domain.consulta.DadosAgendamentoConsulta;
 import com.rgbrain.api.domain.consulta.ValidacaoException;
 
-public class ValidadorMedicoComOutraConsultaNoMesmoHorario {
+@Component
+public class ValidadorMedicoComOutraConsultaNoMesmoHorario implements ValidadorAgendamentoConsultas{
     
+    @Autowired
     private ConsultaRepository repository;
     
-    public void validar(Long idMedico, LocalDateTime dataConsulta) {
-        var consultasNoMesmoHorario = repository.existsByMedicoIdAndData(idMedico, dataConsulta); 
+    @Override
+    public void validar(DadosAgendamentoConsulta dados) {
+        var consultasNoMesmoHorario = repository.existsByMedicoIdAndData(dados.idMedico(), dados.data()); 
 
         if (consultasNoMesmoHorario) {
             throw new ValidacaoException("Medico com outra consulta no mesmo horário");

@@ -3,13 +3,18 @@ package com.rgbrain.api.domain.consulta.validacoes;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
+import com.rgbrain.api.domain.consulta.DadosAgendamentoConsulta;
 import com.rgbrain.api.domain.consulta.ValidacaoException;
 
-public class ValidadorHorarioAntecedencia {
+@Component
+public class ValidadorHorarioAntecedencia implements ValidadorAgendamentoConsultas{
     
-    public static void validar(LocalDateTime dataConsulta) {
+    @Override
+    public void validar(DadosAgendamentoConsulta dados) {
         var agora = LocalDateTime.now();
-        var diferencaMinutos = Duration.between(agora, dataConsulta);
+        var diferencaMinutos = Duration.between(agora, dados.data());
 
         if (diferencaMinutos.toMinutes() < 30) {
             throw new ValidacaoException("Consulta deve ser agendada com antecedência de 30 minutos");

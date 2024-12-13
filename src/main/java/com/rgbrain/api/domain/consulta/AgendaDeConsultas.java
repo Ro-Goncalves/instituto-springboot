@@ -1,8 +1,11 @@
 package com.rgbrain.api.domain.consulta;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rgbrain.api.domain.consulta.validacoes.ValidadorAgendamentoConsultas;
 import com.rgbrain.api.domain.medico.Medico;
 import com.rgbrain.api.domain.medico.MedicoRepository;
 import com.rgbrain.api.domain.paciente.PacienteRepository;
@@ -18,8 +21,11 @@ public class AgendaDeConsultas {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private List<ValidadorAgendamentoConsultas> validadores;
     
-    public void agendar(DadosAgendamentoConsulta dados) {
+    public DadosDetalhamentoConsulta agendar(DadosAgendamentoConsulta dados) {
 
         var idPaciente = dados.idPaciente();
         if (!pacienteRepository.existsById(idPaciente)) {
@@ -33,8 +39,16 @@ public class AgendaDeConsultas {
         }
         var medico = escolherMedico(dados);
 
+        if (medico == null) {
+            throw new ValidacaoException("Não exite médico disponível nessa data");
+        }
+
+        validadores.forEach(E -> E.validar(dados));
+        
         var consulta = new Consulta(null, medico, paciente, dados.data());
         consultaRepository.save(consulta);
+
+        return new DadosDetalhamentoConsulta(consulta);
     }
 
     private Medico escolherMedico(DadosAgendamentoConsulta dados) {

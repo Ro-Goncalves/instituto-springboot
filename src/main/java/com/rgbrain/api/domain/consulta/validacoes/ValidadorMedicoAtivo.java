@@ -1,16 +1,21 @@
 package com.rgbrain.api.domain.consulta.validacoes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.rgbrain.api.domain.consulta.DadosAgendamentoConsulta;
 import com.rgbrain.api.domain.consulta.ValidacaoException;
 import com.rgbrain.api.domain.medico.MedicoRepository;
 
-public class ValidadorMedicoAtivo {
+@Component
+public class ValidadorMedicoAtivo implements ValidadorAgendamentoConsultas{
     
     @Autowired
     private static MedicoRepository repository;
 
-    public static void validar(Long idMedico) {
+    @Override
+    public void validar(DadosAgendamentoConsulta dados) {
+        var idMedico = dados.idMedico();
         if (idMedico == null) {
             return;
         }

@@ -1,13 +1,18 @@
 package com.rgbrain.api.domain.consulta.validacoes;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
+import com.rgbrain.api.domain.consulta.DadosAgendamentoConsulta;
 import com.rgbrain.api.domain.consulta.ValidacaoException;
 
-public class ValidadorHorarioFuncionamentoClinica {
+@Component
+public class ValidadorHorarioFuncionamentoClinica implements ValidadorAgendamentoConsultas{
     
-    public static void validar(LocalDateTime dataConsulta) {
+    @Override
+    public void validar(DadosAgendamentoConsulta dados) {
+        var dataConsulta = dados.data();
         var isDomingo = dataConsulta.getDayOfWeek().equals(DayOfWeek.SATURDAY);
         var isAntesAbertura = dataConsulta.getHour() < 7;
         var isDepoisEncerramento = dataConsulta.getHour() > 18;
