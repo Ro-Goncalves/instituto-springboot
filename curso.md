@@ -101,3 +101,45 @@ Infeta todas as classes com validadores, principios SOLID. SOL
 Isolar os códigos de validações de regras de negócio em classes separadas, utilizando nelas a anotação @Component do Spring;
 Finalizar a implementação do algoritmo de agendamento de consultas;
 Utilizar os princípios SOLID para deixar o código da funcionalidade de agendamento de consultas mais fácil de entender, evoluir e testar.
+
+## Documentação da API
+
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.7.0</version>
+</dependency>
+
+@Configuration
+public class SpringDocConfigurations {
+    
+    @Bean
+     public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+           .components(new Components()
+                .addSecuritySchemes("bearer-key",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")))
+                .info(new Info()
+                    .title("Voll.med API")
+                    .description("API Rest da aplicação Voll.med, contendo as funcionalidades de CRUD de médicos e de pacientes, além de agendamento e cancelamento de consultas")
+                    .contact(new Contact()
+                        .name("Time Backend")
+                        .email("backend@voll.med"))
+                .license(new License()
+                    .name("Apache 2.0")
+                    .url("http://voll.med/api/licenca")));
+    }
+}
+
+@SecurityRequirement(name = "bearer-key")
+
+Adicionar a biblioteca SpringDoc no projeto para que ela faça a geração automatizada da documentação da API;
+Analisar a documentação do SpringDoc para entender como realizar a sua configuração em um projeto;
+Acessar os endereços que disponibilizam a documentação da API nos formatos yaml e html;
+Utilizar o Swagger UI para visualizar e testar uma API Rest;
+Configurar o JWT na documentação gerada pelo SpringDoc.
+
+## Testes com Spring Boot
