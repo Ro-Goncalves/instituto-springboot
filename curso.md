@@ -101,3 +101,7 @@ Infeta todas as classes com validadores, principios SOLID. SOL
 Isolar os códigos de validações de regras de negócio em classes separadas, utilizando nelas a anotação @Component do Spring;
 Finalizar a implementação do algoritmo de agendamento de consultas;
 Utilizar os princípios SOLID para deixar o código da funcionalidade de agendamento de consultas mais fácil de entender, evoluir e testar.
+
+## Testes AUtomatizados
+
+
