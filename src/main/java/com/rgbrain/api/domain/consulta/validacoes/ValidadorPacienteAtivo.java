@@ -14,7 +14,7 @@ public class ValidadorPacienteAtivo implements ValidadorAgendamentoConsultas{
     private PacienteRepository repository;
 
     @Override
-    public void validar(DadosAgendamentoConsulta dados) {        
+    public void validar(DadosAgendamentoConsulta dados) {
         var isAtivo = repository.findAtivoById(dados.idPaciente());       
         if (!isAtivo) {
             throw new ValidacaoException("Consulta nao pode ser marcada com paciente inativo");
