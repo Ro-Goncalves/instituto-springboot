@@ -12,6 +12,7 @@ import com.rgbrain.api.domain.medico.DadosListagemMedico;
 import com.rgbrain.api.domain.medico.Medico;
 import com.rgbrain.api.domain.medico.MedicoRepository;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/medicos")
+@SecurityRequirement(name = "bearer-key")
 public class MedicoController {
 
     @Autowired

@@ -17,8 +17,11 @@ import com.rgbrain.api.domain.paciente.DadosListagemPaciente;
 import com.rgbrain.api.domain.paciente.Paciente;
 import com.rgbrain.api.domain.paciente.PacienteRepository;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("pacientes")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
