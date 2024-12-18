@@ -1,5 +1,5 @@
 CREATE TABLE pacientes(
-    id          BIGINT       PRIMARY KEY AUTOINCREMENT,
+    id          INTEGER      PRIMARY KEY AUTOINCREMENT,
     nome        VARCHAR(100) NOT NULL,
     email       VARCHAR(100) NOT NULL UNIQUE,
     cpf         VARCHAR(14)  NOT NULL UNIQUE,

@@ -11,18 +11,17 @@ import com.rgbrain.api.domain.medico.MedicoRepository;
 public class ValidadorMedicoAtivo implements ValidadorAgendamentoConsultas{
     
     @Autowired
-    private static MedicoRepository repository;
+    private MedicoRepository repository;
 
     @Override
     public void validar(DadosAgendamentoConsulta dados) {
-        var idMedico = dados.idMedico();
-        if (idMedico == null) {
+        if (dados.idMedico() == null) {
             return;
         }
-        
-        var medico = repository.getReferenceById(idMedico);
-        if (!medico.getAtivo()) {
-            throw new ValidacaoException("Consulta nao pode ser marcada com medico inativo");
+
+        var medicoEstaAtivo = repository.findAtivoById(dados.idMedico());
+        if (!medicoEstaAtivo) {
+            throw new ValidacaoException("Consulta não pode ser agendada com médico excluído");
         }
     }
 }

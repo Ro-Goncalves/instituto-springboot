@@ -4,6 +4,7 @@ import com.rgbrain.api.domain.endereco.Endereco;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@Builder
 public class Paciente {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
