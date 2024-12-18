@@ -21,16 +21,25 @@ public class MedicoRepositoryTest {
     private MedicoRepository medicoRepository;
 
     @Test
-    @DisplayName("Deveria Devolver Null quando unico médico cadastrado não está disponível na data")
+    @DisplayName("Deve retornar NULL quando nenhum medico estiver disponivel")
     @Sql({"/medico-nao-disponivel.sql"})
     @Sql(scripts = "/limpar-database.sql", executionPhase = AFTER_TEST_METHOD)
-    void fake() {
-        String dataHoraString = "2024-12-16T10:00:00+03:00";
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME; 
-        var dataConsulta = LocalDateTime.parse(dataHoraString, formatter);
+    void quandoNenhumMedicoEstiverDisponivel_deveRetornarNull() {        
+        // GIVEN
+        var dataConsulta = dataConsulta();
 
+        // WHEN
         var medicoLivre = medicoRepository.escolherMedicoAleatorio(Especialidade.CARDIOLOGIA, dataConsulta);
 
+        // THEN
         assertThat(medicoLivre).isNull();
+    }
+
+    private LocalDateTime dataConsulta() {
+        var dataHoraString = "2024-12-23T10:00";
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        var dataConsulta = LocalDateTime.parse(dataHoraString, formatter);
+        
+        return dataConsulta;
     }
 }
