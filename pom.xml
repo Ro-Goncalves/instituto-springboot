@@ -54,13 +54,7 @@
 		<plugin>
 			<groupId>org.graalvm.buildtools</groupId>
 			<artifactId>native-maven-plugin</artifactId>
-		</plugin>
-
-		<dependency>
-			<groupId>org.springdoc</groupId>
-			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.7.0</version>
-		</dependency>
+		</plugin>		
 				
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
