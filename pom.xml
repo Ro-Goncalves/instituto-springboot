@@ -51,6 +51,11 @@
 		</dependency>
 		<!-- JWT -->
 
+		<plugin>
+			<groupId>org.graalvm.buildtools</groupId>
+			<artifactId>native-maven-plugin</artifactId>
+		</plugin>
+
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

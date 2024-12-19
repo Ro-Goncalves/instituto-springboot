@@ -143,3 +143,21 @@ Utilizar o Swagger UI para visualizar e testar uma API Rest;
 Configurar o JWT na documentação gerada pelo SpringDoc.
 
 ## Testes com Spring Boot
+
+Escrever testes automatizados em uma aplicação com Spring Boot;
+Escrever testes automatizados de uma interface Repository, seguindo a estratégia de usar o mesmo banco de dados que a aplicação utiliza;
+Sobrescrever propriedades do arquivo application.properties, criando outro arquivo chamado application-test.properties que seja carregado apenas ao executar os testes, utilizando para isso a anotação @ActiveProfiles;
+Escrever testes automatizados de uma classe Controller, utilizando a classe MockMvc para simular requisições na API;
+Testar cenários de erro 400 e código 200 no teste de uma classe controller.
+
+## Build com Maven
+
+Compilar nativamente
+
+./mvnw -Pnative native:compile
+
+Funciona o build de uma aplicação com Spring Boot;
+Utilizar arquivos de propriedades específicos para cada profile, alterando em cada arquivo as propriedades que precisam ser modificadas;
+Configurar informações sensíveis da aplicação, como dados de acesso ao banco de dados, via variáveis de ambiente;
+Realizar o build do projeto via Maven;
+Executar a aplicação via terminal, com o comando java -jar, passando as variáveis de ambiente como parâmetro.
