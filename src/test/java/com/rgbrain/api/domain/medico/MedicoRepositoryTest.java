@@ -22,7 +22,7 @@ public class MedicoRepositoryTest {
 
     @Test
     @DisplayName("Deve retornar NULL quando nenhum medico estiver disponivel")
-    @Sql({"/medico-nao-disponivel.sql"})
+    @Sql({"/cadastrar-medicos.sql", "/cadastrar-pacientes.sql", "/cadastrar-consultas.sql"})
     @Sql(scripts = "/limpar-database.sql", executionPhase = AFTER_TEST_METHOD)
     void quandoNenhumMedicoEstiverDisponivel_deveRetornarNull() {        
         // GIVEN
@@ -33,6 +33,22 @@ public class MedicoRepositoryTest {
 
         // THEN
         assertThat(medicoLivre).isNull();
+    }
+
+    @Test
+    @DisplayName("Deve retornar medico disponivel")
+    @Sql({"/cadastrar-medicos.sql", "/cadastrar-pacientes.sql"})
+    @Sql(scripts = "/limpar-database.sql", executionPhase = AFTER_TEST_METHOD)
+    void quandoExistirMedicoDisponivel_deveRetornarMedico() {        
+        // GIVEN
+        var medico = MedicoDadosTeste.criarMedico();
+        var dataConsulta = dataConsulta();
+
+        // WHEN
+        var medicoLivre = medicoRepository.escolherMedicoAleatorio(Especialidade.CARDIOLOGIA, dataConsulta);
+
+        // THEN
+        assertThat(medicoLivre).isEqualTo(medico);
     }
 
     private LocalDateTime dataConsulta() {
