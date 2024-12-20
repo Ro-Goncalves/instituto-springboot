@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<dependencies>
@@ -48,13 +48,7 @@
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>4.4.0</version>
-		</dependency>
-		<!-- JWT -->
-
-		<plugin>
-			<groupId>org.graalvm.buildtools</groupId>
-			<artifactId>native-maven-plugin</artifactId>
-		</plugin>		
+		</dependency>		
 				
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -121,10 +115,137 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.graalvm.buildtools</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+			</plugin>		
+
+			<!-- CONFIGURA OS TESTES DE INTEGRAÇÃO -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>					
+					<includes>
+						<include>**/*ITCase.java</include>
+						<include>**/*ComponentTest.java</include>
+					</includes>
+					<forkedProcessExitTimeoutInSeconds>7200</forkedProcessExitTimeoutInSeconds>
+					<shutdown>kill</shutdown>
+				</configuration>
+			</plugin>
+
+			<!-- CONFIGURA OS TESTES DE UNIDADE -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>					
+					<includes>
+						<include>**/*Spec.java</include>
+						<include>**/*Test.java</include>
+					</includes>
+					<forkedProcessExitTimeoutInSeconds>7200</forkedProcessExitTimeoutInSeconds>
+					<shutdown>kill</shutdown>
+				</configuration>
+			</plugin>
+
+			<!-- CONFIGURA O JACOCO -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<configuration>
+					<excludes>
+						<exclude>**/com/rgbrain/api/ApiApplication.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>unit-test-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>integration-test-report</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>						
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.5.2</version>			
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.21.0</version>
+				<configuration>
+					<locales>pt_BR</locales>
+					<outputDirectory>${project.build.directory}/site</outputDirectory>
+				</configuration>				
+			</plugin>
+
+			<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>3.3.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+		</plugins>
+	</reporting>
 </project>
