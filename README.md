@@ -1,8 +1,6 @@
-# Spring Boot - API VOLL MED  <!-- omit in toc -->
+# 🚑🩺 Spring Boot - API VOLL MED  <!-- omit in toc -->
 
-Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à formação Java e Spring Boot da Alura. A API foi criada com base na formação *Java e Spring Boot: Aprenda a criar aplicações com o framework mais amado do mundo Java*.
-
-[Formação Alura](https://cursos.alura.com.br/formacao-spring-boot-3)
+Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à formação Java e Spring Boot da Alura. A API foi criada com base na formação *Java e Spring Boot: Aprenda a criar aplicações com o framework mais amado do mundo Java*. [Formação Alura](https://cursos.alura.com.br/formacao-spring-boot-3)
 
 - [Objetivo](#objetivo)
   - [Dependências principais do projeto](#dependências-principais-do-projeto)
@@ -10,7 +8,6 @@ Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à form
 - [Executando o Projeto](#executando-o-projeto)
   - [Extensões Instaladas](#extensões-instaladas)
   - [Como Rodar o Projeto](#como-rodar-o-projeto)
-  - [Exemplos de Requisições](#exemplos-de-requisições)
 - [Execute Você Mesmo](#execute-você-mesmo)
   - [Pré-requisitos](#pré-requisitos)
   - [Passo 1: Clone o Repositório](#passo-1-clone-o-repositório)
@@ -18,52 +15,50 @@ Este projeto faz parte dos meus estudos em Spring Boot, uma introdução à form
   - [Passo 3: Inicie o Servidor](#passo-3-inicie-o-servidor)
   - [Passo 4: Teste a Aplicação](#passo-4-teste-a-aplicação)
 - [Resultado](#resultado)
-  - [Adicionando um Novo Médico](#adicionando-um-novo-médico)
-  - [Consultado todos os Médicos](#consultado-todos-os-médicos)
-  - [Atualizando um Médico](#atualizando-um-médico)
-  - [Excluindo um Médico](#excluindo-um-médico)
 - [Próximos Passos](#próximos-passos)
 
 ## Objetivo  
 
-O projeto tem como objetivo apresentar uma introdução ao Spring Boot, criando um CRUD (Create, Read, Update, Delete) de médicos. Ele visa ensinar os conceitos fundamentais sobre a criação de APIs REST, uso de anotações do Spring Boot, integração com banco de dados utilizando JpaRepository, além de padrões de projeto como Bean Validation e injeção de dependência.
+O projeto tem como objetivo apresentar uma introdução ao Spring Boot. Ele visa ensinar os conceitos fundamentais sobre a criação de APIs REST, uso de anotações do Spring Boot, integração com banco de dados utilizando JpaRepository, além de padrões de projeto como Bean Validation e injeção de dependência.
+
+Além disso, o projeto busca demonstrar boas práticas de desenvolvimento, como a utilização de migrações de banco de dados com Flyway, validação de dados com Bean Validation, e a configuração automática de um servidor web embutido.
 
 ### Dependências principais do projeto
 
-- **SQLite JDBC Driver**  
-  Conecta e interage com bancos de dados SQLite.
+- **📦 SQLite JDBC Driver**  
+Conecta e interage com bancos de dados SQLite.
   
-- **Hibernate Community Dialects**  
-  Dialetos adicionais do Hibernate para suportar o SQLite.
+- **🔧 Hibernate Community Dialects**  
+Dialetos adicionais do Hibernate para suportar o SQLite.
 
-- **Spring Boot Starter Web**  
-  Facilita o desenvolvimento de aplicações web com Spring Boot e configura automaticamente um servidor embutido (Tomcat/Jetty).
+- **🌐 Spring Boot Starter Web**  
+Facilita o desenvolvimento de aplicações web com Spring Boot e configura automaticamente um servidor embutido (Tomcat/Jetty).
 
-- **Spring Boot Starter Data JPA**  
-  Integração com JPA (Java Persistence API) para interações com banco de dados de forma simplificada.
+- **🗄️ Spring Boot Starter Data JPA**  
+Integração com JPA (Java Persistence API) para interações com banco de dados de forma simplificada.
 
-- **Spring Boot Starter Validation**  
-  Suporte para validação de dados utilizando Bean Validation.
+- **✅ Spring Boot Starter Validation**  
+Suporte para validação de dados utilizando Bean Validation.
 
-- **Flyway Core**  
-  Ferramenta de migração de banco de dados para gerenciar alterações no schema.
+- **🚀 Flyway Core**  
+Ferramenta de migração de banco de dados para gerenciar alterações no schema.
 
-- **Lombok**  
-  Elimina a escrita de código boilerplate, como getters, setters e construtores.
+- **🔍 Lombok**  
+Elimina a escrita de código boilerplate, como getters, setters e construtores.
 
-- **Spring Boot DevTools**  
-  Melhora a produtividade com reinicialização automática do servidor durante o desenvolvimento.
+- **⚙️ Spring Boot DevTools**  
+Melhora a produtividade com reinicialização automática do servidor durante o desenvolvimento.
 
-- **Java JWT**  
-  Biblioteca da Auth0 para criar e validar JSON Web Tokens (JWT), comumente usados para autenticação e autorização.
+- **🔐 Java JWT**  
+Biblioteca da Auth0 para criar e validar JSON Web Tokens (JWT), comumente usados para autenticação e autorização.
 
-- **Spring Boot Starter Security**  
-  Fornece suporte integrado para segurança em aplicações Spring, incluindo autenticação, autorização e proteção contra ataques comuns, como CSRF e XSS.
+- **🛡️ Spring Boot Starter Security**  
+Fornece suporte integrado para segurança em aplicações Spring, incluindo autenticação, autorização e proteção contra ataques comuns, como CSRF e XSS.
 
-- **Native Maven Plugin**  
+- **🛠️ Native Maven Plugin**  
 Plugin para criar executáveis nativos com o GraalVM, otimizando o desempenho e reduzindo o tempo de inicialização das aplicações.
 
-- **Springdoc OpenAPI Starter WebMVC UI**  
+- **📘 Springdoc OpenAPI Starter WebMVC UI**  
 Integração com o OpenAPI para gerar automaticamente documentação interativa (Swagger UI) de APIs RESTful desenvolvidas com Spring MVC.
 
 ## Tecnologias e Ferramentas Utilizadas
@@ -157,139 +152,58 @@ Se tudo estiver correto, o servidor será iniciado na porta padrão **8080**.
 ### Passo 4: Teste a Aplicação  
 
 1. **Acesse a API**:  
-   Abra o navegador e navegue até [http://localhost:8080](http://localhost:8080).  
+  Abra o navegador e navegue até [http://localhost:8080](http://localhost:8080).  
 
 2. **Faça Requisições HTTP**:  
-   Utilize a extensão **REST Client** no VS Code ou qualquer ferramenta de sua preferência (como Postman) para interagir com os endpoints. Se estiver usando a exstensão, acesse o arquivo `src/main/resources/voll_med_api.http`.
+   Acesse o [Swagger UI](http://localhost:8080/swagger-ui/index.html#/) e seja feliz.
 
 ## Resultado  
 
-### Adicionando um Novo Médico
+Veja alguns exemplos de uso da API:  
 
-```bash
-#Request
-POST http://localhost:8080/medicos
-Content-Type: application/json
+**LOGIN**  
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+     <div style="width: 50%;">
+        <p>REQUEST</p>
+        <img src="imagens/login-request.png" style="width: 100%;"/>
+    </div>
+    <div style="width: 50%;">
+        <p>RESPONSE</p>
+        <img src="imagens/login-response.png" style="width: 100%;"/>
+    </div>
+</div>
+<br><br>
 
-{
-    "nome": "Rodrigo da Silva Sauro",
-    "email": "rodrigo.sauro@voll.med",
-    "crm": "987654",
-    "especialidade": "GINECOLOGIA",
-    "telefone": "2512349876",
-    "endereco": {
-        "logradouro": "Rua Ruada",
-        "bairro": "Bairro Bairrado",
-        "cep": "87654321",
-        "cidade": "Cidade Cidadada",
-        "uf": "SC",
-        "numero": "69",
-        "complemento": "Complemento Complementado"
-        }
-}
-
-#Response
-HTTP/1.1 200 
-Content-Length: 0
-Date: Sat, 30 Nov 2024 21:44:20 GMT
-Connection: close
-```
-
-### Consultado todos os Médicos
-
-```bash
-#Request
-GET http://localhost:8080/medicos
-
-#Response
-HTTP/1.1 200 
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Sat, 30 Nov 2024 21:45:24 GMT
-Connection: close
-
-{
-  "content": [
-    {
-      "id": 1,
-      "nome": "Rodrigo Gonçalves",
-      "email": "rodrigo.ferreira@voll.med",
-      "crm": "123456",
-      "especialidade": "ORTOPEDIA"
-    },
-    {
-      "id": 2,
-      "nome": "Rodrigo da Silva Sauro",
-      "email": "rodrigo.sauro@voll.med",
-      "crm": "987654",
-      "especialidade": "GINECOLOGIA"
-    }
-  ],
-  "pageable": {
-    "pageNumber": 0,
-    "pageSize": 10,
-    "sort": {
-      "sorted": true,
-      "unsorted": false,
-      "empty": false
-    },
-    "offset": 0,
-    "paged": true,
-    "unpaged": false
-  },
-  "totalPages": 1,
-  "totalElements": 2,
-  "last": true,
-  "first": true,
-  "size": 10,
-  "number": 0,
-  "sort": {
-    "sorted": true,
-    "unsorted": false,
-    "empty": false
-  },
-  "numberOfElements": 2,
-  "empty": false
-}
-```
-
-### Atualizando um Médico
-
-```bash
-#Request
-PUT http://localhost:8080/medicos
-Content-Type: application/json
-
-{
-    "id": 1,
-    "nome": "Rodrigo Machado de Assis",
-    "telefone": "9685213258"
-}
-
-#Response
-HTTP/1.1 200 
-Content-Length: 0
-Date: Sat, 30 Nov 2024 21:47:27 GMT
-Connection: close
-```
-
-### Excluindo um Médico
-
-```bash
-#Request
-DELETE http://localhost:8080/medicos/1
-
-#Response
-HTTP/1.1 200 
-Content-Length: 0
-Date: Sat, 30 Nov 2024 21:48:11 GMT
-Connection: close
-```
+**CADASTRAR PACIENTE**  
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between">
+     <div style="width: 50%;">
+        <p>REQUEST</p>
+        <img src="imagens/pacientes-request.png" style="width: 100%;"/>
+    </div>
+    <div style="width: 50%;">
+        <p>RESPONSE</p>
+        <img src="imagens/pacientes-response.png" style="width: 100%;"/>
+    </div>
+</div>
 
 ## Próximos Passos  
 
-A jornada com o Spring Boot está só começando! Meu próximo objetivo é refinar ainda mais o projeto, incluindo uma ferramenta de *linter* para manter o código limpo e padronizado. Estou avaliando o uso do **SonarQube**, que permitirá uma análise mais profunda da qualidade do código e ajudará a identificar possíveis pontos de melhoria. Além disso, planejo implementar uma suíte de testes robusta para aumentar a cobertura de testes e garantir que cada funcionalidade esteja devidamente validada e funcionando conforme o esperado.
+- **🔍 Refinar o Projeto**  
+  Incluir uma ferramenta de linter para manter o código limpo e padronizado.
 
-Também estou animado para explorar outras ferramentas e práticas que possam melhorar o ciclo de desenvolvimento, como integração contínua (*CI*) e entrega contínua (*CD*), garantindo que o projeto evolua de forma escalável e profissional.
+- **📊 Análise de Código**  
+  Avaliar o uso do SonarQube para uma análise mais profunda da qualidade do código e identificar possíveis pontos de melhoria.
 
-Se você também está se aventurando nesse universo ou apenas se interessa por tecnologia e boas práticas de desenvolvimento, será um prazer trocar ideias! Conecte-se comigo no [LinkedIn](https://www.linkedin.com/in/ro-goncalves/) e vamos construir juntos. 🚀  
+- **🧪 Suíte de Testes**  
+  Implementar uma suíte de testes robusta para aumentar a cobertura de testes e garantir que cada funcionalidade esteja devidamente validada e funcionando conforme o esperado.
+
+- **🔄 Integração Contínua (CI)**  
+  Explorar ferramentas e práticas de integração contínua para melhorar o ciclo de desenvolvimento.
+
+- **🚀 Entrega Contínua (CD)**  
+  Implementar práticas de entrega contínua para garantir que o projeto evolua de forma escalável e profissional.
+
+- **🤝 Conexões e Colaborações**  
+  Conectar-se com outros desenvolvedores interessados em tecnologia e boas práticas de desenvolvimento para trocar ideias e construir juntos.
+
+>Se você também está se aventurando nesse universo ou apenas se interessa por tecnologia e boas práticas de desenvolvimento, será um prazer trocar ideias! Conecte-se comigo no [LinkedIn](https://www.linkedin.com/in/ro-goncalves/) e vamos construir juntos. 🚀  
