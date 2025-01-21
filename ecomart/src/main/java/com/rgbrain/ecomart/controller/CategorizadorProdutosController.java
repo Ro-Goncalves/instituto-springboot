@@ -16,17 +16,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/gerador-produtos")
-public class GeradorProdutosController {
+@RequestMapping("/categorizador-produtos")
+public class CategorizadorProdutosController {
 
     @Autowired
 	private OpenAiChatModel chatModel;
 
     @GetMapping("")
-    public ResponseEntity<String> gerarProdutos() {
-        UserMessage userMessage = new UserMessage(
-				"TGere 5 produtos ecologicos.");
-		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate("Seu nome é Brian, seja sempre cortês e amigavel. Deve responder sempre em Português");
+    public ResponseEntity<String> categorizarProdutos(String produto) {
+        UserMessage userMessage = new UserMessage(produto);
+
+		SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate("""
+            Você é um categorizador de produtos e deve responder apenas o nome da categoria do produto informado
+
+            Escolha uma categoria dentra a lista abaixo:
+
+            * Higiene pessoal
+            * Eletronicos
+            * Esportes
+            * Outros
+
+            ###exemplo de uso###
+            Pergunta: Bola de futebol
+            Resposta: Esportes
+        """);
+
 		Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "Bob", "voice", "pirate"));
 		Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
 		ChatResponse response = this.chatModel.call(prompt);

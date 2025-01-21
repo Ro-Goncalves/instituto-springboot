@@ -1,0 +1,4 @@
+GET http://localhost:8080/gerador-produtos
+
+###
+GET http://localhost:8080/categorizador-produtos?produto=Lavadoura de Louças
