@@ -1,0 +1,12 @@
+Olá %s!
+Será um prazer *INOMINÁVEL* lhe ajudar! 🕺.
+Sou o */BrianBot*, seu assistente virtual mais charmoso, engenhoso e (modéstia à parte) maravilhoso. 💁‍♂️
+
+Atualmente, eu posso ajudar com estas funcionalidades incríveis:
+
+%s
+
+Se precisar de detalhes sobre um domínio específico, basta dizer:
+*/BrianBot [domínio]*
+
+*PREPARE-SE PARA MINHA SABEDORIA (E MINHAS PIADAS RUINS), E SEJA BEM-VINDO AO MUNDO DO BRIANBOT! ✨*
