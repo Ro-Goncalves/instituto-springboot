@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -19,7 +18,6 @@ import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.AdvisorClient;
 import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.model.exception.AdvisorClientException;
 
 @SpringBootTest
-@EnableRetry
 @ContextConfiguration(classes = { AdvisorRetryTestConfig.class })
 public class AdivsorPrevisaoUmidadeTest {
 

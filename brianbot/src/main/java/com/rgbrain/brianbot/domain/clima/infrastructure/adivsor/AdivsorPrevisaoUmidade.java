@@ -1,20 +1,18 @@
 package com.rgbrain.brianbot.domain.clima.infrastructure.adivsor;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.model.exception.AdvisorClientException;
 import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.model.reponse.ResponsePrevisaoUmidade;
 
 import lombok.extern.slf4j.Slf4j;
 
-@EnableRetry
 @Slf4j
-@Component
+@Service
 public class AdivsorPrevisaoUmidade {
 
     private String urlPrevisaoUmidade;
