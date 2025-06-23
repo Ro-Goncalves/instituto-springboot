@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.annotation.EnableRetry;
 
+import com.rgbrain.brianbot.domain.clima.infrastructure.FalhaRequisicaoRepository;
 import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.AdivsorPrevisaoUmidade;
 import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.AdvisorClient;
 
@@ -12,7 +13,7 @@ import com.rgbrain.brianbot.domain.clima.infrastructure.adivsor.AdvisorClient;
 class AdvisorRetryTestConfig {
 
     @Bean
-    public AdivsorPrevisaoUmidade adivsorPrevisaoUmidade(AdvisorClient advisorClient) {
-        return new AdivsorPrevisaoUmidade("http://teste.url", advisorClient);
+    public AdivsorPrevisaoUmidade adivsorPrevisaoUmidade(AdvisorClient advisorClient, FalhaRequisicaoRepository falhaRequisicaoRepository) {
+        return new AdivsorPrevisaoUmidade("http://teste.url", advisorClient, falhaRequisicaoRepository);
     }
 }
